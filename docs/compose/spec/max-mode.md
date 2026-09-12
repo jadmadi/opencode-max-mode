@@ -1,14 +1,38 @@
 ---
 feature: max-mode
-status: in-progress
+status: delivered
 updated: 2026-09-12
 branch: feat/max-mode
-commits:
+commits: 75a2481..9c33608
 ---
 
 # Max Mode
 
 ## Report
+
+**What was built** - A single-file OpenCode V2 plugin that registers a
+`best_of_n` tool and a `/max` command. The tool runs 2 to 8 candidate answers in
+parallel through `ctx.generate.text`, asks a judge which is best, and returns
+the winner as tool content. `/max <n>` sets the session default, `/max` shows
+it, and `/max off` clears it. `MAX_MODE_MODEL` overrides the model when the
+session model does not support transient generation.
+
+**Verification** - `bun test`: 19 pass, 0 fail, both with and without
+`MAX_MODE_MODEL` set. Live: `/max status` showed 3, `/max 2` then status showed
+2, and `best_of_n` with two candidates on the DeepSeek platform returned "The
+capital of Jordan is Amman." One review round approved with a blocking
+test-hermeticity item and lows, all fixed: the stored count is validated, the
+model override is trimmed, the tests clear the override, and the AGENTS layout
+matches the code.
+
+**Journey log**
+
+1. No plugin hook can replace the main turn's response, so text mode is a tool,
+   not an interceptor. The spike is recorded as T0.
+2. `ctx.generate.text` fails on OpenCode Go, so a session on Go could not run the
+   tool. `MAX_MODE_MODEL` points the candidates and the judge at a working model.
+3. The test suite read `MAX_MODE_MODEL` from the environment, so the documented
+   override made one test fail. The test now clears it.
 
 ## [S1] Problem
 
@@ -47,13 +71,13 @@ A tool runs several candidates and a judge picks one.
       cannot. The `context` hook only edits inputs, and only the `compaction` and
       `title` hooks may set a result. Text mode is therefore a `best_of_n` tool,
       as recorded in S2.
-- [ ] T1: the /max command and per-session settings - acceptance: set, print,
+- [x] T1: the /max command and per-session settings - acceptance: set, print,
       clear, and reject an out-of-range count in a test (covers: S2)
-- [ ] T2: parallel candidate generation - acceptance: a fake-context test
+- [x] T2: parallel candidate generation - acceptance: a fake-context test
       confirms n calls run and all results are collected (covers: S2; depends:
       T1)
-- [ ] T3: the judge call and winner selection - acceptance: a test supplies a
+- [x] T3: the judge call and winner selection - acceptance: a test supplies a
       judge answer and confirms the winner is returned as tool content (covers:
       S2; depends: T2)
-- [ ] T4: README and NOTICE - acceptance: both files exist and name MiMoCode's
+- [x] T4: README and NOTICE - acceptance: both files exist and name MiMoCode's
       max mode as the inspiration (covers: S2; depends: T3)
