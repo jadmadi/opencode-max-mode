@@ -111,8 +111,21 @@ describe("runBestOfN", () => {
   })
 
   test("fails without a session model", async () => {
-    const { ctx } = makeCtx({ model: null })
-    await expect(runBestOfN(ctx, "ses_1", "Q")).rejects.toThrow(/could not resolve the session model/)
+    const saved = process.env.MAX_MODE_MODEL
+    delete process.env.MAX_MODE_MODEL
+    try {
+      const { ctx } = makeCtx({ model: null })
+      await expect(runBestOfN(ctx, "ses_1", "Q")).rejects.toThrow(/could not resolve the session model/)
+    } finally {
+      if (saved !== undefined) process.env.MAX_MODE_MODEL = saved
+    }
+  })
+
+  test("clamps an out-of-range stored count", async () => {
+    const { ctx, store, calls } = makeCtx()
+    await store.set("max-mode/ses_1", 99)
+    await runBestOfN(ctx, "ses_1", "Q")
+    expect(calls()).toBe(3)
   })
 
   test("MAX_MODE_MODEL overrides the session model", async () => {

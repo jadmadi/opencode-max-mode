@@ -34,7 +34,7 @@ function key(sessionID: string): string {
 
 async function storedCandidates(ctx: any, sessionID: string): Promise<number | undefined> {
   const value = await ctx.storage.get(key(sessionID))
-  return typeof value === "number" ? value : undefined
+  return clampCandidates(value)
 }
 
 function judgePrompt(prompt: string, candidates: string[]): string {
@@ -74,9 +74,10 @@ async function mapLimit(count: number, limit: number, callback: () => Promise<st
 
 function parseModelRef(ref: string | undefined): { providerID: string; id: string } | undefined {
   if (!ref) return undefined
-  const slash = ref.indexOf("/")
-  if (slash < 1 || slash === ref.length - 1) return undefined
-  return { providerID: ref.slice(0, slash), id: ref.slice(slash + 1) }
+  const cleaned = ref.trim()
+  const slash = cleaned.indexOf("/")
+  if (slash < 1 || slash === cleaned.length - 1) return undefined
+  return { providerID: cleaned.slice(0, slash), id: cleaned.slice(slash + 1) }
 }
 
 async function resolveModel(ctx: any, sessionID: string): Promise<{ providerID: string; id: string } | undefined> {

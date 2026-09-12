@@ -48,8 +48,9 @@ mode is a `best_of_n` tool, not a next-turn interceptor.
 
 ## Layout
 
-- `parseCandidates` - parses and clamps the count.
-- `candidatePrompt`, `judgePrompt`, `parseWinner` - prompts and parsing.
+- `parseCandidates`, `clampCandidates` - parse and bound the candidate count.
+- `judgePrompt`, `parseWinner` - the judge prompt and its parsing.
+- `resolveModel` - the session model, or `MAX_MODE_MODEL`.
 - `runBestOfN` - the tool body, exported for tests.
 - `setup` - registers the tool and the command.
 - `max-mode.test.ts` - tests with a fake ctx.
