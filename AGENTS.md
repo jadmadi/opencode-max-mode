@@ -41,13 +41,16 @@ mode is a `best_of_n` tool, not a next-turn interceptor.
 - `ctx.tool.transform((editor) => editor.add({ name, description, input, execute }))`
   registers the tool. The execute context carries `sessionID`.
 - `ctx.generate.text({ model, prompt })` makes one candidate or the judge call.
-  The model comes from `ctx.session.get({ sessionID })`.
+  The model comes from `ctx.session.get({ sessionID })`. It failed on OpenCode Go
+  with `Request is missing x-opencode-session` in testing, so `MAX_MODE_MODEL`
+  overrides the model.
 - The session default lives in `ctx.storage` under `max-mode/<sessionID>`.
 
 ## Layout
 
-- `parseCandidates` - parses and clamps the count.
-- `candidatePrompt`, `judgePrompt`, `parseWinner` - prompts and parsing.
+- `parseCandidates`, `clampCandidates` - parse and bound the candidate count.
+- `judgePrompt`, `parseWinner` - the judge prompt and its parsing.
+- `resolveModel` - the session model, or `MAX_MODE_MODEL`.
 - `runBestOfN` - the tool body, exported for tests.
 - `setup` - registers the tool and the command.
 - `max-mode.test.ts` - tests with a fake ctx.
