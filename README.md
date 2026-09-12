@@ -37,6 +37,16 @@ returns the winning text.
 
 Cost multiplies with the candidate count: `n` calls plus one judge.
 
+## Model
+
+Candidates and the judge use the session's model. Some providers do not support
+transient generation: OpenCode Go returned `Request is missing x-opencode-session`
+in testing. Set `MAX_MODE_MODEL` to a working model, for example:
+
+```sh
+MAX_MODE_MODEL=deepseek/deepseek-flash
+```
+
 ## Tests
 
 ```sh
