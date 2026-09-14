@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test"
-import plugin, { clampCandidates, judgePrompt, parseCandidates, parseWinner, runBestOfN } from "./max-mode.ts"
+import plugin, { clampCandidates, judgePrompt, parseCandidates, parseWinner, runBestOfN, VERSION } from "./max-mode.ts"
 
 function makeCtx(options: { judge?: string; candidate?: (n: number) => string; model?: any } = {}) {
   const store = new Map<string, unknown>()
@@ -183,5 +183,12 @@ describe("setup", () => {
     await (plugin as any).setup(ctx)
     const result = await tools[0].execute({ prompt: "Q" }, { sessionID: "ses_1" })
     expect(result.content).toBe("answer 1")
+  })
+})
+
+describe("version", () => {
+  test("VERSION matches package.json", async () => {
+    const pkg = (await Bun.file(new URL("./package.json", import.meta.url)).json()) as { version: string }
+    expect(VERSION).toBe(pkg.version)
   })
 })
