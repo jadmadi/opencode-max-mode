@@ -1,6 +1,6 @@
 {
   "name": "opencode-max-mode",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "OpenCode V2 plugin that adds a best-of-N tool with a judge",
   "type": "module",
   "license": "MIT",
