@@ -11,6 +11,8 @@
 // The runtime does not resolve @opencode/plugin, so this file exports a plain
 // { id, setup } object.
 
+const VERSION = "0.1.0"
+
 const MIN = 2
 const MAX = 8
 const DEFAULT = 3
@@ -145,7 +147,7 @@ const plugin = {
 
           if (!text || text.toLowerCase() === "status") {
             const current = await storedCandidates(ctx, sessionID)
-            throw new Error(`best-of-n candidates: ${current ?? DEFAULT} (session default), cap ${MAX}`)
+            throw new Error(`best-of-n candidates: ${current ?? DEFAULT} (session default), cap ${MAX}\nmax-mode ${VERSION}`)
           }
 
           const parsed = parseCandidates(text)
@@ -161,5 +163,5 @@ const plugin = {
   },
 }
 
-export { clampCandidates, judgePrompt, parseCandidates, parseWinner, runBestOfN }
+export { clampCandidates, judgePrompt, parseCandidates, parseWinner, runBestOfN, VERSION }
 export default plugin
