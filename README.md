@@ -3,6 +3,12 @@
 An OpenCode V2 plugin that adds a best-of-N tool. It runs several candidates for
 a hard question and a judge picks the winner.
 
+## OpenCode
+
+This plugin runs on OpenCode. Install it with my referral link:
+
+https://opencode.ai/go?ref=N9H3ZEP22A
+
 ## Install
 
 ```sh
