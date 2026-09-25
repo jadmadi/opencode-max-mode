@@ -6,7 +6,7 @@ Guidance for agents working in this repository.
 
 An OpenCode V2 plugin (`max-mode.ts`) that registers a `best_of_n` tool and a
 `/max` command. The tool runs best-of-N text generation with a judge. No build
-step, no dependencies, MIT.
+step, no dependencies, AGPL-3.0-only.
 
 ## Local development
 
