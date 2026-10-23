@@ -8,10 +8,12 @@
 // response: the `context` hook only edits inputs, and only the `compaction` and
 // `title` hooks may set a result.
 //
-// The runtime does not resolve @opencode/plugin, so this file exports a plain
-// { id, setup } object.
+// The host provides @opencode/plugin at runtime, so this file uses
+// Plugin.define.
 
-const VERSION = "2026.9.0"
+import { Plugin } from "@opencode/plugin"
+
+const VERSION = "2026.10.0"
 
 const MIN = 2
 const MAX = 8
@@ -112,7 +114,7 @@ async function runBestOfN(ctx: any, sessionID: string, prompt: string, requested
   return answers[winner]
 }
 
-const plugin = {
+const plugin = Plugin.define({
   id: "max-mode",
   async setup(ctx: any) {
     await ctx.tool.transform((editor: any) => {
@@ -161,7 +163,7 @@ const plugin = {
       })
     })
   },
-}
+})
 
 export { clampCandidates, judgePrompt, parseCandidates, parseWinner, runBestOfN, VERSION }
 export default plugin
